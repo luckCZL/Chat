@@ -1,6 +1,10 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '@/Route/types';
 
-export interface Props {
+interface LoginInterface {
+  name: string;
+}
+export default class Props {
   navigation: StackNavigationProp<RootStackParamList, 'Login'>;
+  route!: { params: LoginInterface };
 }

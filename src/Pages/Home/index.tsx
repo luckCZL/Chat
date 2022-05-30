@@ -1,6 +1,12 @@
 import Utils from '@/Utils';
 import * as React from 'react';
-import { StyleSheet, View, ScrollView, RefreshControl } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  RefreshControl,
+  Alert,
+} from 'react-native';
 import Base from '../Base';
 import GlobalVar from '@/GlobalVar';
 import Props from './Props';
@@ -20,6 +26,7 @@ let that: any = null;
 @observer
 export default class Home extends Base<Props, State> {
   phoneNumber: string = '';
+  ws: WebSocket | null = null;
   constructor(props: Props) {
     super(props);
     GlobalVar.comingCustomServicePage = true;
@@ -41,19 +48,30 @@ export default class Home extends Base<Props, State> {
     this.onWs();
   }
 
+  componentWillUnmount() {
+    console.info(22);
+    this.ws?.close();
+  }
+
   onWs = () => {
-    let ws = null;
-    ws = new WebSocket('ws://192.168.31.144:8888');
-    ws.onopen = (e) => {
+    this.ws = new WebSocket('ws://192.168.31.144:8888');
+    this.ws.onopen = (e) => {
       console.log('onopen', e);
+      this.ws?.send(
+        JSON.stringify({
+          type: 'register',
+          userName: GlobalVar.UserInfo.name,
+        }),
+      );
     };
-    ws.onmessage = (evt) => {
-      console.log('onmessage', evt.data);
+    this.ws.onmessage = (evt) => {
+      const data = JSON.parse(evt.data);
+      console.log('onmessage', data);
     };
-    ws.onclose = (e) => {
+    this.ws.onclose = (e) => {
       console.log('onclose', e);
     };
-    ws.onerror = (e) => {
+    this.ws.onerror = (e) => {
       console.log('onerror', e);
     };
   };
@@ -137,7 +155,7 @@ export default class Home extends Base<Props, State> {
     ];
     return (
       <View style={styles.container}>
-        <NavBar showLeftIcon={false} leftText="骑着蜗牛敲代码" />
+        <NavBar showLeftIcon={false} leftText={GlobalVar.UserInfo.name} />
         <FlatList
           data={data}
           renderItem={(item) => this.renderItem(item)}

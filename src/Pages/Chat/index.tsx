@@ -33,12 +33,13 @@ export default class Chat extends Base<Props, State> {
   render() {
     const { messageStore } = this.props;
     const { params } = this.props.route;
-    console.log(params, '聊天页参数');
+    console.info(params, '聊天页参数');
     return (
       <View style={styles.container}>
         <NavBar
           showLeftIcon={true}
-          leftText={params.userName}
+          // leftText={params.userName}
+          leftText={GlobalVar.UserInfo.name}
           goBack={() => this.goBack()}
         />
         <KeyboardAvoidingView style={styles.homeContainter}>

@@ -76,36 +76,41 @@ export default class Login extends Base<Props, State> {
     const { mobile, password } = this.state;
     console.log(mobile, '手机号码');
     console.log(password, '密码');
-    let reg = /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
-    if (!reg.test(mobile)) {
-      Utils.showToast('请填写正确的11位手机号码');
-      return;
-    }
-    if (password.length < 6) {
-      Utils.showToast('请输入6个字符以上的密码');
-      return;
-    }
-    const params = {
-      mobile,
-      password,
+    // let reg = /^1(3[0-9]|4[5,7]|5[0,1,2,3,5,6,7,8,9]|6[2,5,6,7]|7[0,1,7,8]|8[0-9]|9[1,8,9])\d{8}$/;
+    // if (!reg.test(mobile)) {
+    //   Utils.showToast('请填写正确的11位手机号码');
+    //   return;
+    // }
+    // if (password.length < 6) {
+    //   Utils.showToast('请输入6个字符以上的密码');
+    //   return;
+    // }
+    // const params = {
+    //   mobile,
+    //   password,
+    // };
+    // const data = await Http.login(params);
+    // console.log(data, '登录');
+    // if (data.code === 200) {
+    //   Utils.showToast(
+    //     '欢迎您,' + (data.data.Name || data.data.NickName || data.data.Mobile),
+    //   );
+    //   GlobalVar.token = data.data.SessionToken;
+    //   GlobalVar.UserInfo = data.data;
+    //   this.props.navigation.navigate('Home');
+    // } else {
+    //   Utils.showToast(data.msg);
+    // }
+    GlobalVar.UserInfo = {
+      name: mobile,
+      nickName: mobile,
     };
-    const data = await Http.login(params);
-    console.log(data, '登录');
-    if (data.code === 200) {
-      Utils.showToast(
-        '欢迎您,' + (data.data.Name || data.data.NickName || data.data.Mobile),
-      );
-      GlobalVar.token = data.data.SessionToken;
-      GlobalVar.UserInfo = data.data;
-      this.props.navigation.navigate('Home');
-    } else {
-      Utils.showToast(data.msg);
-    }
+    this.props.navigation.navigate('Home', { name: mobile });
   }
 
   // 跳转注册
   toRegister() {
-    this.props.navigation.navigate('Register');
+    this.props.navigation.navigate('Register', { name: mobile });
   }
 
   // 点击导航栏回退
