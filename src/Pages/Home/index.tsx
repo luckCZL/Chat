@@ -33,6 +33,7 @@ export default class Home extends Base<Props, State> {
     // 初始化组件状态
     this.state = {
       refreshing: true,
+      chatList: [],
     };
   }
 
@@ -51,10 +52,12 @@ export default class Home extends Base<Props, State> {
   componentWillUnmount() {
     console.info(22);
     this.ws?.close();
+    GlobalVar.ws?.close();
   }
 
   onWs = () => {
-    this.ws = new WebSocket('ws://192.168.31.144:8888');
+    this.ws = new WebSocket('ws://192.168.119.156:8888');
+    GlobalVar.ws = this.ws;
     this.ws.onopen = (e) => {
       console.log('onopen', e);
       this.ws?.send(
@@ -67,6 +70,35 @@ export default class Home extends Base<Props, State> {
     this.ws.onmessage = (evt) => {
       const data = JSON.parse(evt.data);
       console.log('onmessage', data);
+
+      switch (data.type) {
+        case 'message':
+          // 会话列表
+          const chatList = data.data.map((element) => {
+            const { id, name, type, online, message, updateTime } = element;
+            return {
+              id,
+              avatar:
+                'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=1291089457,3418078582&fm=26&gp=0.jpg',
+              userId: id,
+              userName: name,
+              message,
+              content: message.length
+                ? message[message.length - 1].content
+                : '',
+              updateTime,
+            };
+          });
+          // this.setState({ refreshing: false });
+          this.setState({ chatList, refreshing: false });
+          break;
+        case 'send':
+          console.info('来消息啦');
+          break;
+
+        default:
+          break;
+      }
     };
     this.ws.onclose = (e) => {
       console.log('onclose', e);
@@ -110,11 +142,11 @@ export default class Home extends Base<Props, State> {
       };
       data.push(newObj);
     }
-    messageStore.saveMessageData(data);
+    // messageStore.saveMessageData(data);
   }
 
   render() {
-    const { refreshing } = this.state;
+    const { refreshing, chatList } = this.state;
     const data = [
       {
         id: '1',
@@ -157,7 +189,7 @@ export default class Home extends Base<Props, State> {
       <View style={styles.container}>
         <NavBar showLeftIcon={false} leftText={GlobalVar.UserInfo.name} />
         <FlatList
-          data={data}
+          data={chatList}
           renderItem={(item) => this.renderItem(item)}
           keyExtractor={(item, index) => item.id + index}
           style={styles.homeContainter}
@@ -193,9 +225,9 @@ export default class Home extends Base<Props, State> {
     if (this.state.refreshing === false) {
       this.setState({ refreshing: true });
     }
-    setTimeout(() => {
-      this.setState({ refreshing: false });
-    }, 2000);
+    // setTimeout(() => {
+    //   this.setState({ refreshing: false });
+    // }, 2000);
     console.log('刷新');
   }
 

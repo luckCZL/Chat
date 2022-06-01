@@ -1,4 +1,4 @@
-import { UserInfoInterface } from "@/Interface/common";
+import { UserInfoInterface } from '@/Interface/common';
 
 export default class GlobalVar {
   static isFirst = true;
@@ -8,4 +8,5 @@ export default class GlobalVar {
   static token: string = 'b9f408584c35549600315c4007cbed96';
   static UserInfo: UserInfoInterface = new UserInfoInterface();
   static isNavigation: boolean = true; //是否显示底部导航栏
+  static ws: WebSocket | null = null;
 }

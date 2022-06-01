@@ -6,6 +6,7 @@ import GlobalStyles from '@/Assets/Styles/GlobalStyles';
 import { TextInput } from 'react-native-gesture-handler';
 import Images from '@/Assets/Images';
 import TouchableButton from '@/Components/Common/TouchableButton';
+import GlobalVar from '@/GlobalVar';
 
 export type Props = {
   onPress?: () => void;
@@ -82,6 +83,12 @@ export default class ChatInput extends Component<Props, State> {
     if (value) {
       //发送文字
       // Utils.showToast('发送' + value);
+      GlobalVar.ws?.send(
+        JSON.stringify({
+          type: 'send',
+          data: value,
+        }),
+      );
       this.props.onSend && this.props.onSend(value);
       this.setState({ value: '' });
     } else {
