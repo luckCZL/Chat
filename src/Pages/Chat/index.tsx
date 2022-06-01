@@ -28,12 +28,16 @@ export default class Chat extends Base<Props, State> {
     this.state = {};
   }
 
-  componentDidMount() {}
-
-  render() {
+  componentDidMount() {
     const { messageStore } = this.props;
     const { params } = this.props.route;
     console.info(params, '聊天页参数');
+    messageStore.saveMessageData(params.message || []);
+  }
+
+  render() {
+    const { messageStore } = this.props;
+
     return (
       <View style={styles.container}>
         <NavBar

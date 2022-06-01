@@ -7,6 +7,7 @@ export class chatItemInterface {
   userName: string = ''; //用户名称
   content: string = ''; //最新一条会话内容
   updateTime: number = 0; //更新时间
+  message?: chatMessageItemInterface[];
 }
 
 // 聊天消息item

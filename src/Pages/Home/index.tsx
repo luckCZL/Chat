@@ -56,7 +56,8 @@ export default class Home extends Base<Props, State> {
   }
 
   onWs = () => {
-    this.ws = new WebSocket('ws://192.168.119.156:8888');
+    // this.ws = new WebSocket('ws://192.168.119.156:8888');
+    this.ws = new WebSocket('ws://192.168.31.144:9999');
     GlobalVar.ws = this.ws;
     this.ws.onopen = (e) => {
       console.log('onopen', e);
@@ -94,6 +95,7 @@ export default class Home extends Base<Props, State> {
           break;
         case 'send':
           console.info('来消息啦');
+          this.props.messageStore.saveMessageDataItem(data.data);
           break;
 
         default:
