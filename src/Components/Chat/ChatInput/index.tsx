@@ -83,12 +83,12 @@ export default class ChatInput extends Component<Props, State> {
     if (value) {
       //发送文字
       // Utils.showToast('发送' + value);
-      GlobalVar.ws?.send(
-        JSON.stringify({
-          type: 'send',
-          data: value,
-        }),
-      );
+      // GlobalVar.ws?.send(
+      //   JSON.stringify({
+      //     type: 'send',
+      //     data: value,
+      //   }),
+      // );
       this.props.onSend && this.props.onSend(value);
       this.setState({ value: '' });
     } else {

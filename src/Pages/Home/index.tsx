@@ -20,6 +20,7 @@ import Handler from '@/Library/Handler';
 import Tcp from '@/Library/Tcp';
 import { inject, observer } from 'mobx-react';
 import Mock from 'mockjs';
+import Chat from '../Chat';
 
 let that: any = null;
 @inject('messageStore')
@@ -56,8 +57,8 @@ export default class Home extends Base<Props, State> {
   }
 
   onWs = () => {
-    // this.ws = new WebSocket('ws://192.168.119.156:8888');
-    this.ws = new WebSocket('ws://192.168.31.144:9999');
+    this.ws = new WebSocket('ws://192.168.119.156:9999');
+    // this.ws = new WebSocket('ws://192.168.31.144:9999');
     GlobalVar.ws = this.ws;
     this.ws.onopen = (e) => {
       console.log('onopen', e);
@@ -96,6 +97,7 @@ export default class Home extends Base<Props, State> {
         case 'send':
           console.info('来消息啦');
           this.props.messageStore.saveMessageDataItem(data.data);
+          // Chat.scrollToEnd();
           break;
 
         default:

@@ -84,6 +84,16 @@ export default class Chat extends Base<Props, State> {
       createTime: new Date().getTime(),
     };
     this.props.messageStore.saveMessageDataItem(data);
+    GlobalVar.ws?.send(
+      JSON.stringify({
+        type: 'send',
+        data,
+      }),
+    );
+    this.scrollToEnd();
+  }
+
+  public scrollToEnd() {
     this._flatList.scrollToEnd();
   }
 
